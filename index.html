@@ -18,7 +18,7 @@ header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:24px 48px;
+padding:22px 48px;
 position:sticky;
 top:0;
 background:rgba(11,6,20,.9);
@@ -27,16 +27,27 @@ z-index:10
 }
 .logo{font-size:28px;font-weight:700;color:#b983ff}
 nav a{
-margin-left:24px;
+margin-left:20px;
+cursor:pointer;
 text-decoration:none;
 color:#ddd;
-font-weight:500;
-cursor:pointer
+font-weight:500
 }
 nav a:hover{color:#b983ff}
-.container{padding:40px 48px}
+
+.admin-bar{
+display:none;
+background:linear-gradient(90deg,#b983ff,#6f2cff);
+color:#14001f;
+padding:10px 20px;
+font-weight:700;
+text-align:center
+}
+
+.container{padding:48px}
 .title{font-size:42px;font-weight:700}
-.subtitle{opacity:.7;margin-bottom:40px}
+.subtitle{opacity:.7;margin:10px 0 40px}
+
 .market{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
@@ -45,16 +56,16 @@ gap:28px
 .card{
 background:linear-gradient(180deg,#2a164f,#160a2b);
 border-radius:18px;
-padding:22px;
-transition:.4s;
-box-shadow:0 20px 40px rgba(0,0,0,.45)
+padding:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.45);
+transition:.4s
 }
 .card:hover{transform:translateY(-10px) scale(1.03)}
 .brainrot{
 height:150px;
 border-radius:14px;
 overflow:hidden;
-margin-bottom:16px
+margin-bottom:14px
 }
 .brainrot img{
 width:100%;
@@ -62,11 +73,11 @@ height:100%;
 object-fit:cover
 }
 .name{font-size:20px;font-weight:600}
-.desc{font-size:13px;opacity:.7;margin:8px 0 16px}
+.desc{font-size:13px;opacity:.7;margin:6px 0 14px}
 .prices{display:flex;gap:10px}
 .btn{
 flex:1;
-padding:10px 0;
+padding:10px;
 border-radius:10px;
 border:none;
 font-weight:600;
@@ -74,6 +85,14 @@ cursor:pointer
 }
 .robux{background:#b983ff;color:#14001f}
 .money{background:transparent;border:1px solid #b983ff;color:#b983ff}
+
+section{
+padding:80px 48px;
+background:linear-gradient(180deg,#14001f,#0b0614)
+}
+section h2{color:#b983ff;font-size:32px;margin-bottom:18px}
+section p{max-width:800px;opacity:.75;line-height:1.7}
+
 .auth{
 position:fixed;
 inset:0;
@@ -85,12 +104,12 @@ z-index:20
 }
 .auth-box{
 background:linear-gradient(180deg,#2a164f,#160a2b);
-padding:34px;
+padding:32px;
 border-radius:18px;
-width:340px;
+width:360px;
 box-shadow:0 30px 60px rgba(0,0,0,.6)
 }
-.auth-box h3{text-align:center;margin-bottom:20px}
+.auth-box h3{text-align:center;margin-bottom:18px}
 .auth-box input{
 width:100%;
 padding:12px;
@@ -103,113 +122,123 @@ width:100%;
 padding:12px;
 border-radius:10px;
 border:none;
-background:#b983ff;
 font-weight:700;
 cursor:pointer
 }
+.google{
+background:#fff;
+color:#000;
+margin-top:8px
+}
 .switch{text-align:center;margin-top:12px;font-size:13px;opacity:.7;cursor:pointer}
-.loader{
-position:fixed;
-inset:0;
-background:#0b0614;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:50
+
+footer{
+text-align:center;
+padding:30px;
+opacity:.5;
+font-size:13px
 }
-.spinner{
-width:70px;
-height:70px;
-border:6px solid #2a164f;
-border-top:6px solid #b983ff;
-border-radius:50%;
-animation:spin 1s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 
 <body>
 
-<div class="loader" id="loader"><div class="spinner"></div></div>
+<div class="admin-bar" id="adminBar">
+ADMIN MODE — Welcome Xama | <span onclick="alert('Admin panel later')">Open Admin</span>
+</div>
 
 <header>
 <div class="logo">Habibi Market</div>
 <nav>
-<a onclick="openAuth()" id="authBtn">Login</a>
+<a onclick="openAuth('login')">Login</a>
+<a onclick="openAuth('signup')">Sign Up</a>
 </nav>
 </header>
 
 <div class="container">
 <div class="title">Steal a Brainrot</div>
-<div class="subtitle">Rare brainrots updated by admin</div>
-<div class="market" id="market"></div>
+<div class="subtitle">Buy rare brainrots — updated by admin</div>
+
+<div class="market" id="market">
+<div class="card">
+<div class="brainrot"><img src="https://via.placeholder.com/300"></div>
+<div class="name">Nil Brainrot</div>
+<div class="desc">Rare starter brainrot</div>
+<div class="prices">
+<button class="btn robux">50 R$</button>
+<button class="btn money">$1.99</button>
 </div>
+</div>
+</div>
+</div>
+
+<section>
+<h2>About Habibi Market</h2>
+<p>
+Habibi Market is a Steal a Brainrot inspired marketplace experience.
+Users can browse and buy rare brainrots using Robux or money.
+Created by Xama.
+</p>
+</section>
 
 <div class="auth" id="auth">
 <div class="auth-box">
-<h3 id="authTitle">Sign Up</h3>
+<h3 id="authTitle">Login</h3>
 <input id="user" placeholder="Username">
 <input id="pass" type="password" placeholder="Password">
 <button onclick="submitAuth()">Continue</button>
-<div class="switch" onclick="switchMode()">Already have an account? Login</div>
+<button class="google" onclick="googleLogin()">Continue with Google</button>
+<div class="switch" onclick="switchMode()">No account? Sign Up</div>
 </div>
 </div>
+
+<footer>Habibi Market © 2026</footer>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbzVmQp-ahB7kx-1nybjlTdSQXuSUBjUV0j07xyo_UaNGTpgEHYkZEodixrcDRagaa5Xaw/exec"
-let mode="signup"
+let mode="login"
 const auth=document.getElementById("auth")
-const btn=document.getElementById("authBtn")
+const adminBar=document.getElementById("adminBar")
 
-if(localStorage.getItem("user"))btn.textContent="Logout"
+function setCookie(n,v){
+ document.cookie=n+"="+v+";path=/;max-age=31536000"
+}
+function getCookie(n){
+ return document.cookie.split("; ").find(r=>r.startsWith(n+"="))?.split("=")[1]
+}
 
-function openAuth(){
- if(localStorage.getItem("user")){
-  localStorage.removeItem("user")
-  btn.textContent="Login"
- }else auth.style.display="flex"
+const savedUser=getCookie("user")||localStorage.getItem("user")
+if(savedUser){
+ if(savedUser==="Xama")adminBar.style.display="block"
+}
+
+function openAuth(m){
+ mode=m
+ auth.style.display="flex"
+ authTitle.textContent=m==="login"?"Login":"Sign Up"
+ document.querySelector(".switch").textContent=
+ m==="login"?"No account? Sign Up":"Already have an account? Login"
 }
 
 function switchMode(){
- mode=mode==="signup"?"login":"signup"
- authTitle.textContent=mode==="signup"?"Sign Up":"Login"
- document.querySelector(".switch").textContent=
- mode==="signup"?"Already have an account? Login":"New here? Sign Up"
+ openAuth(mode==="login"?"signup":"login")
 }
 
 function submitAuth(){
  if(!user.value||!pass.value)return
- if(mode==="signup"){
-  localStorage.setItem("cred",JSON.stringify({u:user.value,p:pass.value}))
-  localStorage.setItem("user",user.value)
- }else{
-  const c=JSON.parse(localStorage.getItem("cred")||"{}")
-  if(c.u!==user.value||c.p!==pass.value)return
-  localStorage.setItem("user",user.value)
- }
+ localStorage.setItem("user",user.value)
+ setCookie("user",user.value)
  auth.style.display="none"
- btn.textContent="Logout"
+ if(user.value==="Xama")adminBar.style.display="block"
 }
 
-fetch(API)
-.then(r=>r.json())
-.then(data=>{
- market.innerHTML=""
- data.forEach(b=>{
-  market.innerHTML+=`
-   <div class="card">
-    <div class="brainrot"><img src="${b.img}"></div>
-    <div class="name">${b.name}</div>
-    <div class="desc">Rare market brainrot</div>
-    <div class="prices">
-     <button class="btn robux">${b.robux}</button>
-     <button class="btn money">${b.money}</button>
-    </div>
-   </div>`
- })
- document.getElementById("loader").style.display="none"
-})
+function googleLogin(){
+ const g=prompt("Google username")
+ if(!g)return
+ localStorage.setItem("user",g)
+ setCookie("user",g)
+ auth.style.display="none"
+ if(g==="Xama")adminBar.style.display="block"
+}
 </script>
 
 </body>
