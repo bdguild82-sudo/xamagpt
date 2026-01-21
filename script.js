@@ -1,23 +1,22 @@
-const brainrots = [
- { name:"Brainrot #1", img:"brainrots/b1.png", robux:"100 R$", money:"$5" },
- { name:"Brainrot #2", img:"brainrots/b2.png", robux:"250 R$", money:"$10" },
- { name:"Brainrot #3", img:"brainrots/b3.png", robux:"500 R$", money:"$20" }
-];
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
 
-const market = document.getElementById("market");
+body{
+ background:radial-gradient(circle at top,#2a0a4a,#0b0614);
+ color:#f5f3ff;
+ min-height:100vh;
+}
 
-brainrots.forEach(b => {
- market.innerHTML += `
- <div class="card">
-  <div class="brainrot">
-   <img src="${b.img}">
-  </div>
-  <div class="name">${b.name}</div>
-  <div class="desc">Rare brainrot item</div>
-  <div class="prices">
-   <button class="btn robux">${b.robux}</button>
-   <button class="btn money">${b.money}</button>
-  </div>
- </div>
- `;
-});
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:24px 48px;
+ position:sticky;
+ top:0;
+ background:rgba(11,6,20,.9);
+ backdrop-filter:blur(10px);
+ z-index:10;
+}
+
+.logo{font-size:28px;font-weight:700;color:#b983ff}
+
