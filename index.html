@@ -10,7 +10,6 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
 body{background:radial-gradient(circle at top,#2a0a4a,#0b0614);color:#f5f3ff;min-height:100vh;overflow:hidden}
 
-/* LOADER */
 .loader-screen{
  position:fixed;inset:0;
  background:radial-gradient(circle at top,#2a0a4a,#0b0614);
@@ -29,7 +28,6 @@ body{background:radial-gradient(circle at top,#2a0a4a,#0b0614);color:#f5f3ff;min
 .tip{position:absolute;bottom:80px;font-size:14px;opacity:.85}
 .tip span{color:#b983ff;font-weight:600}
 
-/* HEADER */
 header{
  display:flex;justify-content:space-between;align-items:center;
  padding:24px 48px;background:rgba(11,6,20,.9);
@@ -39,7 +37,6 @@ header{
 nav a{margin-left:24px;color:#ddd;text-decoration:none;cursor:pointer}
 nav a:hover{color:#b983ff}
 
-/* MARKET */
 .container{padding:40px 48px}
 .title{font-size:42px;font-weight:700}
 .subtitle{opacity:.7;margin:10px 0 40px}
@@ -67,7 +64,6 @@ nav a:hover{color:#b983ff}
 .money{background:transparent;border:1px solid #b983ff;color:#b983ff}
 .btn:hover{transform:scale(1.05)}
 
-/* AUTH MODAL */
 .auth{
  position:fixed;inset:0;background:rgba(0,0,0,.7);
  display:none;align-items:center;justify-content:center;z-index:20
@@ -88,7 +84,6 @@ nav a:hover{color:#b983ff}
 .switch{text-align:center;font-size:13px;opacity:.7;margin-top:10px;cursor:pointer}
 .error{color:#ff7b7b;font-size:13px;text-align:center;margin-bottom:8px}
 
-/* ERROR POPUP */
 .alert{
  position:fixed;bottom:30px;left:50%;
  transform:translateX(-50%);
@@ -132,7 +127,6 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 
 <footer>Habibi Market © 2026</footer>
 
-<!-- AUTH -->
 <div class="auth" id="auth">
  <div class="auth-box">
   <h3 id="authTitle">Sign Up</h3>
@@ -147,13 +141,11 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 <div class="alert" id="alert">⚠️ Please log in to purchase</div>
 
 <script>
-/* LOADER */
 window.onload=()=>setTimeout(()=>{
  loader.classList.add("hide");
  document.body.style.overflow="auto";
 },2600);
 
-/* AUTH */
 let mode="signup";
 const auth=document.getElementById("auth");
 const error=document.getElementById("authError");
@@ -194,7 +186,6 @@ function submitAuth(){
  btn.textContent="Logout";
 }
 
-/* ITEMS */
 const items=[
  {
   name:"Money Money Puggy",
@@ -226,7 +217,6 @@ items.forEach(i=>{
  </div>`;
 });
 
-/* PURCHASE CHECK */
 function buy(){
  if(!localStorage.getItem("currentUser")){
   alertBox.classList.add("show");
