@@ -35,7 +35,25 @@ header{
  padding:24px 48px;background:rgba(11,6,20,.9);
  backdrop-filter:blur(10px)
 }
-.logo{font-size:28px;font-weight:700;color:#b983ff}
+
+/* SLASH EFFECT */
+.logo{
+ font-size:28px;font-weight:700;color:#b983ff;
+ position:relative;overflow:hidden
+}
+.logo::after{
+ content:"";
+ position:absolute;top:0;left:-120%;
+ width:120%;height:100%;
+ background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.8) 50%,transparent 60%);
+ transform:skewX(-20deg);
+ animation:slash 3.5s infinite;
+}
+@keyframes slash{
+ 0%,40%{left:-120%}
+ 60%,100%{left:120%}
+}
+
 nav a{margin-left:24px;color:#ddd;text-decoration:none;cursor:pointer}
 nav a:hover{color:#b983ff}
 
@@ -67,15 +85,18 @@ nav a:hover{color:#b983ff}
 .money{background:transparent;border:1px solid #b983ff;color:#b983ff}
 .btn:hover{transform:scale(1.05)}
 
-/* ===== AUTH ===== */
+/* ===== AUTH / MODALS ===== */
 .auth{
  position:fixed;inset:0;background:rgba(0,0,0,.7);
  display:none;align-items:center;justify-content:center;z-index:20
 }
 .auth-box{
  background:linear-gradient(180deg,#2a164f,#160a2b);
- padding:28px;border-radius:16px;width:320px
+ padding:28px;border-radius:16px;width:320px;
+ animation:pop .4s ease
 }
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+
 .auth-box h3{text-align:center;margin-bottom:14px}
 .auth-box input{
  width:100%;padding:10px;margin-bottom:10px;
@@ -99,10 +120,6 @@ nav a:hover{color:#b983ff}
 }
 .alert.show{opacity:1}
 
-/* ===== AFTER BUY ===== */
-.after-buy{display:none}
-
-/* ===== FOOTER ===== */
 footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 </style>
 </head>
@@ -117,9 +134,7 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 
 <header>
  <div class="logo">Habibi Market</div>
- <nav>
-  <a onclick="openAuth()" id="authBtn">Login</a>
- </nav>
+ <nav><a onclick="openAuth()" id="authBtn">Login</a></nav>
 </header>
 
 <div class="container">
@@ -130,7 +145,7 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 
 <footer>Habibi Market © 2026</footer>
 
-<!-- AUTH MODAL -->
+<!-- AUTH -->
 <div class="auth" id="auth">
  <div class="auth-box">
   <h3 id="authTitle">Sign Up</h3>
@@ -142,43 +157,46 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
  </div>
 </div>
 
-<!-- AFTER BUY -->
-<div class="auth after-buy" id="afterBuy">
+<!-- CONFIRM BUY -->
+<div class="auth" id="confirmBuy">
  <div class="auth-box">
-  <h3>✅ Purchase Started</h3>
+  <h3>⚠️ Confirm Purchase</h3>
   <p style="font-size:13px;opacity:.8;margin-bottom:14px">
-   After buying the Game Pass, message <b>Xama</b> to receive your item.
+   Are you sure you want to buy this Game Pass?
   </p>
-  <a href="https://www.roblox.com/messages/compose"
-     target="_blank"
-     style="display:block;text-align:center;
-     background:#b983ff;color:#14001f;
-     padding:10px;border-radius:8px;
-     text-decoration:none;margin-bottom:10px">
-   💬 Message Xama
-  </a>
-  <a href="https://www.roblox.com/users/0/profile"
-     target="_blank"
-     style="display:block;text-align:center;
-     border:1px solid #b983ff;color:#b983ff;
-     padding:10px;border-radius:8px;
-     text-decoration:none">
-   👤 Open Xama’s Profile
-  </a>
+  <button onclick="redirectToPass()">Redirect</button>
+  <div class="switch" onclick="confirmBuy.style.display='none'">Cancel</div>
+ </div>
+</div>
+
+<!-- AFTER BUY -->
+<div class="auth" id="afterBuy">
+ <div class="auth-box">
+  <h3>✅ Thanks for your purchase</h3>
+  <button onclick="openChat()" style="margin-bottom:10px">💬 Contact Xama</button>
   <div class="switch" onclick="afterBuy.style.display='none'">Close</div>
+ </div>
+</div>
+
+<!-- CHAT -->
+<div class="auth" id="chat">
+ <div class="auth-box" style="width:360px">
+  <h3>Chat with Xama</h3>
+  <div id="chatBox" style="height:220px;overflow-y:auto;background:#12081f;border-radius:10px;padding:10px;margin-bottom:10px;font-size:13px"></div>
+  <input id="chatInput" placeholder="Type your message...">
+  <button onclick="sendMessage()">Send</button>
+  <div class="switch" onclick="chat.style.display='none'">Close</div>
  </div>
 </div>
 
 <div class="alert" id="alert">⚠️ Please log in to purchase</div>
 
 <script>
-/* LOADER */
 window.onload=()=>setTimeout(()=>{
  loader.classList.add("hide");
  document.body.style.overflow="auto";
 },2600);
 
-/* AUTH */
 let mode="signup";
 const users=JSON.parse(localStorage.getItem("users")||"{}");
 const btn=document.getElementById("authBtn");
@@ -200,33 +218,28 @@ function switchMode(){
 
 function submitAuth(){
  const u=user.value,p=pass.value;
- if(!u||!p) return;
-
+ if(!u||!p)return;
  if(mode==="signup"){
   if(users[u]){authError.textContent="Username already taken";return}
   users[u]=p;
   localStorage.setItem("users",JSON.stringify(users));
  }
- if(mode==="login" && users[u]!==p){
+ if(mode==="login"&&users[u]!==p){
   authError.textContent="Invalid login details";return;
  }
-
  localStorage.setItem("currentUser",u);
  auth.style.display="none";
  btn.textContent="Logout";
 }
 
-/* ITEMS */
-const items=[
- {
-  name:"Money Money Puggy",
-  desc:"Base - Tax+Service Fee Included",
-  img:"https://tse3.mm.bing.net/th/id/OIP.aIWdrv89WltqgJZ3oYvFSwHaHa",
-  robux:"950 R$",
-  money:"$7.89",
-  robuxLink:"https://www.roblox.com/game-pass/1684574376/Money-Money-Puggy"
- }
-];
+const items=[{
+ name:"Money Money Puggy",
+ desc:"Base - Tax+Service Fee Included",
+ img:"https://tse3.mm.bing.net/th/id/OIP.aIWdrv89WltqgJZ3oYvFSwHaHa",
+ robux:"950 R$",
+ money:"$7.89",
+ robuxLink:"https://www.roblox.com/game-pass/1684574376/Money-Money-Puggy"
+}];
 
 items.forEach(i=>{
  market.innerHTML+=`
@@ -235,28 +248,52 @@ items.forEach(i=>{
   <div class="name">${i.name}</div>
   <div class="desc">${i.desc}</div>
   <div class="prices">
-   <button class="btn robux" onclick="buyRobux('${i.robuxLink}')">${i.robux}</button>
-   <button class="btn money" onclick="buyMoney()">${i.money}</button>
+   <button class="btn robux" onclick="openConfirm('${i.robuxLink}')">${i.robux}</button>
+   <button class="btn money">${i.money}</button>
   </div>
  </div>`;
 });
 
-/* BUY */
-function buyRobux(link){
+let selectedPass="";
+function openConfirm(link){
  if(!localStorage.getItem("currentUser")){
   alertBox.classList.add("show");
   setTimeout(()=>alertBox.classList.remove("show"),2000);
   return;
  }
- window.open(link,"_blank");
- afterBuy.style.display="flex";
+ selectedPass=link;
+ confirmBuy.style.display="flex";
 }
 
-function buyMoney(){
- if(!localStorage.getItem("currentUser")){
-  alertBox.classList.add("show");
-  setTimeout(()=>alertBox.classList.remove("show"),2000);
- }
+function redirectToPass(){
+ confirmBuy.style.display="none";
+ window.open(selectedPass,"_blank");
+ setTimeout(()=>afterBuy.style.display="flex",1200);
+}
+
+function openChat(){
+ chat.style.display="flex";
+ loadMessages();
+}
+
+function loadMessages(){
+ const u=localStorage.getItem("currentUser");
+ const msgs=JSON.parse(localStorage.getItem("chat_"+u)||"[]");
+ chatBox.innerHTML="";
+ msgs.forEach(m=>{
+  chatBox.innerHTML+=`<div style="margin-bottom:6px;color:${m.from==="me"?"#b983ff":"#9fffb1"}"><b>${m.from==="me"?u:"Xama"}:</b> ${m.text}</div>`;
+ });
+}
+
+function sendMessage(){
+ const u=localStorage.getItem("currentUser");
+ if(!chatInput.value)return;
+ const key="chat_"+u;
+ const msgs=JSON.parse(localStorage.getItem(key)||"[]");
+ msgs.push({from:"me",text:chatInput.value});
+ localStorage.setItem(key,JSON.stringify(msgs));
+ chatInput.value="";
+ loadMessages();
 }
 
 const alertBox=document.getElementById("alert");
