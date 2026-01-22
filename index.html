@@ -10,6 +10,22 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
 body{background:radial-gradient(circle at top,#2a0a4a,#0b0614);color:#f5f3ff;min-height:100vh;overflow:hidden}
 
+/* ===== LOADER ===== */
+.loader-screen{
+ position:fixed;inset:0;background:radial-gradient(circle at top,#2a0a4a,#0b0614);
+ display:flex;align-items:center;justify-content:center;z-index:9999;transition:.8s
+}
+.loader-screen.hide{opacity:0;visibility:hidden}
+.ring{
+ width:120px;height:120px;border-radius:50%;
+ border:6px solid rgba(185,131,255,.15);
+ border-top:6px solid #b983ff;
+ animation:spin 1.2s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tip{position:absolute;bottom:80px;font-size:14px;opacity:.85}
+.tip span{color:#b983ff;font-weight:600}
+
 /* ===== HEADER ===== */
 header{
  display:flex;justify-content:space-between;align-items:center;
@@ -26,27 +42,38 @@ header{
  width:120%;height:100%;
  background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.8) 50%,transparent 60%);
  transform:skewX(-20deg);
- animation:slash 3.5s infinite;
+ animation:slash 3.5s infinite
 }
-@keyframes slash{
- 0%,40%{left:-120%}
- 60%,100%{left:120%}
-}
+@keyframes slash{0%,40%{left:-120%}60%,100%{left:120%}}
 
 nav{display:flex;align-items:center;gap:20px}
-nav img{width:26px;cursor:pointer;display:none}
 nav a{color:#ddd;text-decoration:none;cursor:pointer}
 nav a:hover{color:#b983ff}
+nav img{width:26px;cursor:pointer;display:none}
 
 /* ===== MARKET ===== */
 .container{padding:40px 48px}
+.title{font-size:42px;font-weight:700}
+.subtitle{opacity:.7;margin:10px 0 40px}
 .market{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px}
-.card{background:linear-gradient(180deg,#2a164f,#160a2b);border-radius:18px;padding:18px}
+
+.card{
+ background:linear-gradient(180deg,#2a164f,#160a2b);
+ border-radius:18px;padding:18px;
+ transition:.4s
+}
+.card:hover{transform:translateY(-8px)}
+
 .image-box{height:150px;border-radius:14px;overflow:hidden;margin-bottom:14px}
 .image-box img{width:100%;height:100%;object-fit:cover}
+
 .prices{display:flex;gap:10px}
-.btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer}
+.btn{
+ flex:1;padding:10px;border-radius:10px;
+ border:none;font-weight:600;cursor:pointer
+}
 .robux{background:#b983ff;color:#14001f}
+.money{background:transparent;border:1px solid #b983ff;color:#b983ff}
 
 /* ===== MODALS ===== */
 .auth{
@@ -55,26 +82,25 @@ nav a:hover{color:#b983ff}
 }
 .auth-box{
  background:linear-gradient(180deg,#2a164f,#160a2b);
- padding:20px;border-radius:16px;width:380px
+ padding:28px;border-radius:16px;width:340px;
+ animation:pop .35s ease
 }
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+
 .auth-box input{width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:none}
 .auth-box button{width:100%;padding:10px;border-radius:8px;border:none;background:#b983ff;font-weight:600}
+.switch{text-align:center;font-size:13px;opacity:.7;margin-top:10px;cursor:pointer}
 
 /* ===== INBOX ===== */
-.inbox{
- display:flex;height:400px
-}
+.inbox{display:flex;height:420px}
 .users{
- width:120px;border-right:1px solid rgba(255,255,255,.1);
- overflow-y:auto
+ width:140px;border-right:1px solid rgba(255,255,255,.1);overflow-y:auto
 }
 .users div{
  padding:10px;font-size:13px;cursor:pointer;opacity:.7
 }
-.users div.active,.users div:hover{opacity:1;color:#b983ff}
-.chat{
- flex:1;display:flex;flex-direction:column
-}
+.users div:hover,.users .active{opacity:1;color:#b983ff}
+.chat{flex:1;display:flex;flex-direction:column}
 .chatBox{
  flex:1;background:#12081f;border-radius:10px;
  padding:10px;margin-bottom:10px;font-size:13px;overflow-y:auto
@@ -83,11 +109,26 @@ nav a:hover{color:#b983ff}
 .me{color:#b983ff}
 .them{color:#9fffb1}
 
-footer{text-align:center;padding:30px;opacity:.5}
+/* ===== ALERT ===== */
+.alert{
+ position:fixed;bottom:30px;left:50%;
+ transform:translateX(-50%);
+ background:#2a164f;padding:14px 22px;
+ border-radius:12px;opacity:0;transition:.4s
+}
+.alert.show{opacity:1}
+
+footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 </style>
 </head>
 
 <body>
+
+<!-- LOADER -->
+<div class="loader-screen" id="loader">
+ <div class="ring"></div>
+ <div class="tip">💡 Tip: <span>Buying with Money is cheaper than Robux</span></div>
+</div>
 
 <header>
  <div class="logo">Habibi Market</div>
@@ -100,6 +141,8 @@ footer{text-align:center;padding:30px;opacity:.5}
 </header>
 
 <div class="container">
+ <div class="title">Steal a Brainrot</div>
+ <div class="subtitle">Buy Rare Brainrots using Robux or Money</div>
  <div class="market" id="market"></div>
 </div>
 
@@ -114,9 +157,30 @@ footer{text-align:center;padding:30px;opacity:.5}
  </div>
 </div>
 
+<!-- CONFIRM BUY -->
+<div class="auth" id="confirmBuy">
+ <div class="auth-box">
+  <h3>⚠️ Confirm Purchase</h3>
+  <p style="font-size:13px;opacity:.8;margin-bottom:14px">
+   Are you sure you want to buy this Game Pass?
+  </p>
+  <button onclick="redirectToPass()">Redirect</button>
+  <div class="switch" onclick="confirmBuy.style.display='none'">Cancel</div>
+ </div>
+</div>
+
+<!-- AFTER BUY -->
+<div class="auth" id="afterBuy">
+ <div class="auth-box">
+  <h3>✅ Thanks for your purchase</h3>
+  <button onclick="openChatFromBuy()">💬 Contact Xama</button>
+  <div class="switch" onclick="afterBuy.style.display='none'">Close</div>
+ </div>
+</div>
+
 <!-- INBOX -->
 <div class="auth" id="inbox">
- <div class="auth-box" style="width:600px">
+ <div class="auth-box" style="width:640px">
   <h3>📥 Inbox</h3>
   <div class="inbox">
    <div class="users" id="userList"></div>
@@ -126,19 +190,27 @@ footer{text-align:center;padding:30px;opacity:.5}
     <button onclick="sendMsg()">Send</button>
    </div>
   </div>
-  <div style="text-align:center;opacity:.6;font-size:12px;cursor:pointer"
-       onclick="inbox.style.display='none'">Close</div>
+  <div class="switch" onclick="inbox.style.display='none'">Close</div>
  </div>
 </div>
 
+<div class="alert" id="alert">⚠️ Please log in to purchase</div>
+
 <script>
+/* ===== INIT ===== */
+window.onload=()=>setTimeout(()=>{
+ loader.classList.add("hide");
+ document.body.style.overflow="auto";
+},2600);
+
 const XAMA="Xama";
 const inboxBtn=document.getElementById("inboxBtn");
-const btn=document.getElementById("authBtn");
-let currentChatUser=null;
+const authBtn=document.getElementById("authBtn");
+let selectedPass="",currentChat=null;
 
+/* ===== AUTH ===== */
 if(localStorage.getItem("currentUser")){
- btn.textContent="Logout";
+ authBtn.textContent="Logout";
  inboxBtn.style.display="block";
 }
 
@@ -150,30 +222,63 @@ function openAuth(){
 }
 
 function login(){
+ if(!user.value)return;
  localStorage.setItem("currentUser",user.value);
  auth.style.display="none";
+ authBtn.textContent="Logout";
  inboxBtn.style.display="block";
- btn.textContent="Logout";
 }
 
+/* ===== MARKET ===== */
 const items=[{
  name:"Money Money Puggy",
+ desc:"Base - Tax+Service Fee Included",
  img:"https://tse3.mm.bing.net/th/id/OIP.aIWdrv89WltqgJZ3oYvFSwHaHa",
- robux:"950 R$"
+ robux:"950 R$",
+ money:"$7.89",
+ robuxLink:"https://www.roblox.com/game-pass/1684574376/Money-Money-Puggy"
 }];
 
 items.forEach(i=>{
  market.innerHTML+=`
  <div class="card">
   <div class="image-box"><img src="${i.img}"></div>
-  <button class="btn robux">Buy ${i.robux}</button>
+  <div class="name">${i.name}</div>
+  <div class="desc">${i.desc}</div>
+  <div class="prices">
+   <button class="btn robux" onclick="openConfirm('${i.robuxLink}')">${i.robux}</button>
+   <button class="btn money">${i.money}</button>
+  </div>
  </div>`;
 });
+
+/* ===== BUY FLOW ===== */
+function openConfirm(link){
+ if(!localStorage.getItem("currentUser")){
+  alertBox.classList.add("show");
+  setTimeout(()=>alertBox.classList.remove("show"),2000);
+  return;
+ }
+ selectedPass=link;
+ confirmBuy.style.display="flex";
+}
+
+function redirectToPass(){
+ confirmBuy.style.display="none";
+ window.open(selectedPass,"_blank");
+ setTimeout(()=>afterBuy.style.display="flex",1200);
+}
 
 /* ===== INBOX SYSTEM ===== */
 function openInbox(){
  inbox.style.display="flex";
  loadUsers();
+}
+
+function openChatFromBuy(){
+ afterBuy.style.display="none";
+ openInbox();
+ openChat(XAMA);
 }
 
 function loadUsers(){
@@ -190,16 +295,20 @@ function loadUsers(){
    }
   }
  });
+ if(me!==XAMA && !localStorage.getItem("chat_"+me)){
+  localStorage.setItem("chat_"+me,"[]");
+  loadUsers();
+ }
 }
 
 function openChat(u){
- currentChatUser=u;
+ currentChat=u;
  loadChat();
 }
 
 function loadChat(){
  const me=localStorage.getItem("currentUser");
- const key=me===XAMA?"chat_"+currentChatUser:"chat_"+me;
+ const key=me===XAMA?"chat_"+currentChat:"chat_"+me;
  const msgs=JSON.parse(localStorage.getItem(key)||"[]");
  chatBox.innerHTML="";
  msgs.forEach(m=>{
@@ -208,19 +317,21 @@ function loadChat(){
     <b>${m.from}:</b> ${m.text}
    </div>`;
  });
+ chatBox.scrollTop=chatBox.scrollHeight;
 }
 
 function sendMsg(){
  const me=localStorage.getItem("currentUser");
  if(!msgInput.value)return;
-
- const key=me===XAMA?"chat_"+currentChatUser:"chat_"+me;
+ const key=me===XAMA?"chat_"+currentChat:"chat_"+me;
  const msgs=JSON.parse(localStorage.getItem(key)||"[]");
  msgs.push({from:me,text:msgInput.value});
  localStorage.setItem(key,JSON.stringify(msgs));
  msgInput.value="";
  loadChat();
 }
+
+const alertBox=document.getElementById("alert");
 </script>
 
 </body>
