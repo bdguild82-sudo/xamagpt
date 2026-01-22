@@ -10,25 +10,6 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
 body{background:radial-gradient(circle at top,#2a0a4a,#0b0614);color:#f5f3ff;min-height:100vh;overflow:hidden}
 
-/* ===== LOADER ===== */
-.loader-screen{
- position:fixed;inset:0;
- background:radial-gradient(circle at top,#2a0a4a,#0b0614);
- display:flex;align-items:center;justify-content:center;
- z-index:9999;transition:.8s;
-}
-.loader-screen.hide{opacity:0;visibility:hidden}
-.ring{
- width:120px;height:120px;border-radius:50%;
- border:6px solid rgba(185,131,255,.15);
- border-top:6px solid #b983ff;
- animation:spin 1.2s linear infinite;
- box-shadow:0 0 30px rgba(185,131,255,.6);
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.tip{position:absolute;bottom:80px;font-size:14px;opacity:.85}
-.tip span{color:#b983ff;font-weight:600}
-
 /* ===== HEADER ===== */
 header{
  display:flex;justify-content:space-between;align-items:center;
@@ -36,14 +17,12 @@ header{
  backdrop-filter:blur(10px)
 }
 
-/* SLASH EFFECT */
 .logo{
  font-size:28px;font-weight:700;color:#b983ff;
  position:relative;overflow:hidden
 }
 .logo::after{
- content:"";
- position:absolute;top:0;left:-120%;
+ content:"";position:absolute;top:0;left:-120%;
  width:120%;height:100%;
  background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.8) 50%,transparent 60%);
  transform:skewX(-20deg);
@@ -54,92 +33,73 @@ header{
  60%,100%{left:120%}
 }
 
-nav a{margin-left:24px;color:#ddd;text-decoration:none;cursor:pointer}
+nav{display:flex;align-items:center;gap:20px}
+nav img{width:26px;cursor:pointer;display:none}
+nav a{color:#ddd;text-decoration:none;cursor:pointer}
 nav a:hover{color:#b983ff}
 
 /* ===== MARKET ===== */
 .container{padding:40px 48px}
-.title{font-size:42px;font-weight:700}
-.subtitle{opacity:.7;margin:10px 0 40px}
 .market{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px}
-
-.card{
- background:linear-gradient(180deg,#2a164f,#160a2b);
- border-radius:18px;padding:18px;
- transition:.4s;box-shadow:0 20px 40px rgba(0,0,0,.45)
-}
-.card:hover{transform:translateY(-10px) scale(1.02)}
-
+.card{background:linear-gradient(180deg,#2a164f,#160a2b);border-radius:18px;padding:18px}
 .image-box{height:150px;border-radius:14px;overflow:hidden;margin-bottom:14px}
 .image-box img{width:100%;height:100%;object-fit:cover}
-
-.name{font-size:18px;font-weight:600}
-.desc{font-size:13px;opacity:.7;margin:6px 0 14px}
-
 .prices{display:flex;gap:10px}
-.btn{
- flex:1;padding:10px;border-radius:10px;
- border:none;font-weight:600;cursor:pointer
-}
+.btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer}
 .robux{background:#b983ff;color:#14001f}
-.money{background:transparent;border:1px solid #b983ff;color:#b983ff}
-.btn:hover{transform:scale(1.05)}
 
-/* ===== AUTH / MODALS ===== */
+/* ===== MODALS ===== */
 .auth{
  position:fixed;inset:0;background:rgba(0,0,0,.7);
- display:none;align-items:center;justify-content:center;z-index:20
+ display:none;align-items:center;justify-content:center;z-index:50
 }
 .auth-box{
  background:linear-gradient(180deg,#2a164f,#160a2b);
- padding:28px;border-radius:16px;width:320px;
- animation:pop .4s ease
+ padding:20px;border-radius:16px;width:380px
 }
-@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.auth-box input{width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:none}
+.auth-box button{width:100%;padding:10px;border-radius:8px;border:none;background:#b983ff;font-weight:600}
 
-.auth-box h3{text-align:center;margin-bottom:14px}
-.auth-box input{
- width:100%;padding:10px;margin-bottom:10px;
- border-radius:8px;border:none
+/* ===== INBOX ===== */
+.inbox{
+ display:flex;height:400px
 }
-.auth-box button{
- width:100%;padding:10px;border-radius:8px;
- border:none;background:#b983ff;color:#14001f;font-weight:600
+.users{
+ width:120px;border-right:1px solid rgba(255,255,255,.1);
+ overflow-y:auto
 }
-.switch{text-align:center;font-size:13px;opacity:.7;margin-top:10px;cursor:pointer}
-.error{color:#ff7b7b;font-size:13px;text-align:center;margin-bottom:8px}
+.users div{
+ padding:10px;font-size:13px;cursor:pointer;opacity:.7
+}
+.users div.active,.users div:hover{opacity:1;color:#b983ff}
+.chat{
+ flex:1;display:flex;flex-direction:column
+}
+.chatBox{
+ flex:1;background:#12081f;border-radius:10px;
+ padding:10px;margin-bottom:10px;font-size:13px;overflow-y:auto
+}
+.msg{margin-bottom:6px}
+.me{color:#b983ff}
+.them{color:#9fffb1}
 
-/* ===== ALERT ===== */
-.alert{
- position:fixed;bottom:30px;left:50%;
- transform:translateX(-50%);
- background:#2a164f;padding:14px 22px;
- border-radius:12px;opacity:0;
- pointer-events:none;transition:.4s;
- box-shadow:0 10px 30px rgba(0,0,0,.5)
-}
-.alert.show{opacity:1}
-
-footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
+footer{text-align:center;padding:30px;opacity:.5}
 </style>
 </head>
 
 <body>
 
-<!-- LOADER -->
-<div class="loader-screen" id="loader">
- <div class="ring"></div>
- <div class="tip">💡 Tip: <span>Buying with Money is cheaper than Robux</span></div>
-</div>
-
 <header>
  <div class="logo">Habibi Market</div>
- <nav><a onclick="openAuth()" id="authBtn">Login</a></nav>
+ <nav>
+  <img id="inboxBtn"
+   src="https://cdn4.iconfinder.com/data/icons/roundome-communication-line/32/message_call_mail_communication_Inbox-512.png"
+   onclick="openInbox()">
+  <a onclick="openAuth()" id="authBtn">Login</a>
+ </nav>
 </header>
 
 <div class="container">
- <div class="title">Steal a Brainrot</div>
- <div class="subtitle">Buy Rare Brainrots using Robux or Money</div>
  <div class="market" id="market"></div>
 </div>
 
@@ -148,155 +108,119 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:13px}
 <!-- AUTH -->
 <div class="auth" id="auth">
  <div class="auth-box">
-  <h3 id="authTitle">Sign Up</h3>
-  <div class="error" id="authError"></div>
   <input id="user" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
-  <button onclick="submitAuth()">Continue</button>
-  <div class="switch" onclick="switchMode()">Already have an account? Login</div>
+  <button onclick="login()">Continue</button>
  </div>
 </div>
 
-<!-- CONFIRM BUY -->
-<div class="auth" id="confirmBuy">
- <div class="auth-box">
-  <h3>⚠️ Confirm Purchase</h3>
-  <p style="font-size:13px;opacity:.8;margin-bottom:14px">
-   Are you sure you want to buy this Game Pass?
-  </p>
-  <button onclick="redirectToPass()">Redirect</button>
-  <div class="switch" onclick="confirmBuy.style.display='none'">Cancel</div>
+<!-- INBOX -->
+<div class="auth" id="inbox">
+ <div class="auth-box" style="width:600px">
+  <h3>📥 Inbox</h3>
+  <div class="inbox">
+   <div class="users" id="userList"></div>
+   <div class="chat">
+    <div class="chatBox" id="chatBox"></div>
+    <input id="msgInput" placeholder="Type a message...">
+    <button onclick="sendMsg()">Send</button>
+   </div>
+  </div>
+  <div style="text-align:center;opacity:.6;font-size:12px;cursor:pointer"
+       onclick="inbox.style.display='none'">Close</div>
  </div>
 </div>
-
-<!-- AFTER BUY -->
-<div class="auth" id="afterBuy">
- <div class="auth-box">
-  <h3>✅ Thanks for your purchase</h3>
-  <button onclick="openChat()" style="margin-bottom:10px">💬 Contact Xama</button>
-  <div class="switch" onclick="afterBuy.style.display='none'">Close</div>
- </div>
-</div>
-
-<!-- CHAT -->
-<div class="auth" id="chat">
- <div class="auth-box" style="width:360px">
-  <h3>Chat with Xama</h3>
-  <div id="chatBox" style="height:220px;overflow-y:auto;background:#12081f;border-radius:10px;padding:10px;margin-bottom:10px;font-size:13px"></div>
-  <input id="chatInput" placeholder="Type your message...">
-  <button onclick="sendMessage()">Send</button>
-  <div class="switch" onclick="chat.style.display='none'">Close</div>
- </div>
-</div>
-
-<div class="alert" id="alert">⚠️ Please log in to purchase</div>
 
 <script>
-window.onload=()=>setTimeout(()=>{
- loader.classList.add("hide");
- document.body.style.overflow="auto";
-},2600);
-
-let mode="signup";
-const users=JSON.parse(localStorage.getItem("users")||"{}");
+const XAMA="Xama";
+const inboxBtn=document.getElementById("inboxBtn");
 const btn=document.getElementById("authBtn");
+let currentChatUser=null;
 
-if(localStorage.getItem("currentUser")) btn.textContent="Logout";
+if(localStorage.getItem("currentUser")){
+ btn.textContent="Logout";
+ inboxBtn.style.display="block";
+}
 
 function openAuth(){
  if(localStorage.getItem("currentUser")){
   localStorage.removeItem("currentUser");
-  btn.textContent="Login";
+  location.reload();
  } else auth.style.display="flex";
 }
 
-function switchMode(){
- mode=mode==="signup"?"login":"signup";
- authTitle.textContent=mode==="signup"?"Sign Up":"Login";
- authError.textContent="";
-}
-
-function submitAuth(){
- const u=user.value,p=pass.value;
- if(!u||!p)return;
- if(mode==="signup"){
-  if(users[u]){authError.textContent="Username already taken";return}
-  users[u]=p;
-  localStorage.setItem("users",JSON.stringify(users));
- }
- if(mode==="login"&&users[u]!==p){
-  authError.textContent="Invalid login details";return;
- }
- localStorage.setItem("currentUser",u);
+function login(){
+ localStorage.setItem("currentUser",user.value);
  auth.style.display="none";
+ inboxBtn.style.display="block";
  btn.textContent="Logout";
 }
 
 const items=[{
  name:"Money Money Puggy",
- desc:"Base - Tax+Service Fee Included",
  img:"https://tse3.mm.bing.net/th/id/OIP.aIWdrv89WltqgJZ3oYvFSwHaHa",
- robux:"950 R$",
- money:"$7.89",
- robuxLink:"https://www.roblox.com/game-pass/1684574376/Money-Money-Puggy"
+ robux:"950 R$"
 }];
 
 items.forEach(i=>{
  market.innerHTML+=`
  <div class="card">
   <div class="image-box"><img src="${i.img}"></div>
-  <div class="name">${i.name}</div>
-  <div class="desc">${i.desc}</div>
-  <div class="prices">
-   <button class="btn robux" onclick="openConfirm('${i.robuxLink}')">${i.robux}</button>
-   <button class="btn money">${i.money}</button>
-  </div>
+  <button class="btn robux">Buy ${i.robux}</button>
  </div>`;
 });
 
-let selectedPass="";
-function openConfirm(link){
- if(!localStorage.getItem("currentUser")){
-  alertBox.classList.add("show");
-  setTimeout(()=>alertBox.classList.remove("show"),2000);
-  return;
- }
- selectedPass=link;
- confirmBuy.style.display="flex";
+/* ===== INBOX SYSTEM ===== */
+function openInbox(){
+ inbox.style.display="flex";
+ loadUsers();
 }
 
-function redirectToPass(){
- confirmBuy.style.display="none";
- window.open(selectedPass,"_blank");
- setTimeout(()=>afterBuy.style.display="flex",1200);
-}
-
-function openChat(){
- chat.style.display="flex";
- loadMessages();
-}
-
-function loadMessages(){
- const u=localStorage.getItem("currentUser");
- const msgs=JSON.parse(localStorage.getItem("chat_"+u)||"[]");
- chatBox.innerHTML="";
- msgs.forEach(m=>{
-  chatBox.innerHTML+=`<div style="margin-bottom:6px;color:${m.from==="me"?"#b983ff":"#9fffb1"}"><b>${m.from==="me"?u:"Xama"}:</b> ${m.text}</div>`;
+function loadUsers(){
+ const me=localStorage.getItem("currentUser");
+ userList.innerHTML="";
+ Object.keys(localStorage).forEach(k=>{
+  if(k.startsWith("chat_")){
+   const u=k.replace("chat_","");
+   if(me===XAMA || u===me){
+    const d=document.createElement("div");
+    d.textContent=u;
+    d.onclick=()=>openChat(u);
+    userList.appendChild(d);
+   }
+  }
  });
 }
 
-function sendMessage(){
- const u=localStorage.getItem("currentUser");
- if(!chatInput.value)return;
- const key="chat_"+u;
- const msgs=JSON.parse(localStorage.getItem(key)||"[]");
- msgs.push({from:"me",text:chatInput.value});
- localStorage.setItem(key,JSON.stringify(msgs));
- chatInput.value="";
- loadMessages();
+function openChat(u){
+ currentChatUser=u;
+ loadChat();
 }
 
-const alertBox=document.getElementById("alert");
+function loadChat(){
+ const me=localStorage.getItem("currentUser");
+ const key=me===XAMA?"chat_"+currentChatUser:"chat_"+me;
+ const msgs=JSON.parse(localStorage.getItem(key)||"[]");
+ chatBox.innerHTML="";
+ msgs.forEach(m=>{
+  chatBox.innerHTML+=`
+   <div class="msg ${m.from===me?"me":"them"}">
+    <b>${m.from}:</b> ${m.text}
+   </div>`;
+ });
+}
+
+function sendMsg(){
+ const me=localStorage.getItem("currentUser");
+ if(!msgInput.value)return;
+
+ const key=me===XAMA?"chat_"+currentChatUser:"chat_"+me;
+ const msgs=JSON.parse(localStorage.getItem(key)||"[]");
+ msgs.push({from:me,text:msgInput.value});
+ localStorage.setItem(key,JSON.stringify(msgs));
+ msgInput.value="";
+ loadChat();
+}
 </script>
 
 </body>
